@@ -67,4 +67,8 @@
     background-color: #28a745;
   }
   
-  
+  footer {
+    background-color: #f0f0f0; /* Example background color */
+    padding: 20px;
+    text-align: center;
+  }

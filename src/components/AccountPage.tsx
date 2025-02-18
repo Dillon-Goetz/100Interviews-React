@@ -1,12 +1,13 @@
-// AccountPage.tsx
+
 import React, { useState, useEffect } from "react";
-import { Client, Databases, Account, Models, ID } from "appwrite";
+import { Client, Databases, Models, ID } from "appwrite";
 import { useNavigate } from "react-router-dom";
 import '../styles/AccountPage.css';
+import Pagination from './Pagination';
 
 interface AccountPageProps {
   onLogout: () => Promise<void>;
-  user: Models.User<Models.Preferences> | null; // Add this line
+  user: Models.User<Models.Preferences> | null;
 }
 
 interface Question {
@@ -19,11 +20,13 @@ interface Question {
   userId?: string;
 }
 
-function AccountPage({ onLogout, user }: AccountPageProps) { // Use user prop
+function AccountPage({ onLogout, user }: AccountPageProps) {
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [userQuestions, setUserQuestions] = useState<Question[]>([]);
   const [newQuestion, setNewQuestion] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [questionsPerPage] = useState(5);
 
   const navigate = useNavigate();
 
@@ -33,7 +36,7 @@ function AccountPage({ onLogout, user }: AccountPageProps) { // Use user prop
       .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
     const databases = new Databases(client);
 
-    if (user) { // Check if user prop exists
+    if (user) {
       databases
         .listDocuments(
           import.meta.env.VITE_APPWRITE_DATABASE,
@@ -57,7 +60,7 @@ function AccountPage({ onLogout, user }: AccountPageProps) { // Use user prop
           setError("Failed to fetch questions. Please try again later.");
         });
     }
-  }, [user]); // Add user dependency
+  }, [user]);
 
   const handleCreateQuestion = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,14 +122,30 @@ function AccountPage({ onLogout, user }: AccountPageProps) { // Use user prop
     return <div className="error-message">{error}</div>;
   }
 
+  // All Questions Pagination
+  const indexOfLastQuestion = currentPage * questionsPerPage;
+  const indexOfFirstQuestion = indexOfLastQuestion - questionsPerPage;
+  const currentQuestions = allQuestions.slice(indexOfFirstQuestion, indexOfLastQuestion);
+  const totalPages = Math.ceil(allQuestions.length / questionsPerPage);
+  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
+
+  // User Questions Pagination
+  const userIndexOfLastQuestion = currentPage * questionsPerPage;
+  const userIndexOfFirstQuestion = userIndexOfLastQuestion - questionsPerPage;
+  const currentUserQuestions = userQuestions.slice(userIndexOfFirstQuestion, userIndexOfLastQuestion);
+  const totalUserPages = Math.ceil(userQuestions.length / questionsPerPage);
+  const paginateUser = (pageNumber: number) => setCurrentPage(pageNumber);
+
   return (
     <div className="account-page">
       <h2 className="page-title">Account Dashboard</h2>
 
+      {user && <p className="user-greeting">Hi, {user.name}!</p>}
+
       <div className="questions-section">
         <h3>All Questions</h3>
         <ul className="question-list">
-          {allQuestions.map((question) => (
+          {currentQuestions.map((question) => (
             <li key={question.$id} className="question-item">
               {question.questionText}
             </li>
@@ -134,16 +153,28 @@ function AccountPage({ onLogout, user }: AccountPageProps) { // Use user prop
         </ul>
       </div>
 
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={paginate}
+      />
+
       <div className="questions-section">
         <h3>Your Questions</h3>
         <ul className="question-list">
-          {userQuestions.map((question) => (
+          {currentUserQuestions.map((question) => (
             <li key={question.$id} className="question-item">
               {question.questionText}
             </li>
           ))}
         </ul>
       </div>
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalUserPages}
+        onPageChange={paginateUser}
+      />
 
       <div className="create-question-section">
         <h3>Create New Question</h3>
