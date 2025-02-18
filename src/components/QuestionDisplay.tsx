@@ -35,7 +35,7 @@ export default function EnhancedQuestionDisplay({ numQuestions }: QuestionDispla
           collectionId
         );
 
-        let allQuestions = allQuestionsResponse.documents.map((doc) => ({
+        let allQuestions = allQuestionsResponse.documents.map((doc: any) => ({
           $id: doc.$id,
           questionText: doc.questionText,
           audioID: doc.audioID,

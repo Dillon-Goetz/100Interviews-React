@@ -1,4 +1,4 @@
-// import './style.css'
+
 import { Client, Databases, ID, Query, Storage } from "appwrite";
 
 const client = new Client()
