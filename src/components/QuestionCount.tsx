@@ -1,5 +1,5 @@
 "use client"
-import React, {useState} from 'react'
+import {useState} from 'react'
 import "../styles/QuestionCount.css"
 import { Link } from "react-router-dom";
 

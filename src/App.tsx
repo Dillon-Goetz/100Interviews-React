@@ -8,7 +8,7 @@ import QuestionDisplay from "./components/QuestionDisplay";
 import AccountPage from "./components/AccountPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { Client, Account, Models } from "appwrite";
+import { Client, Account } from "appwrite";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -19,14 +19,14 @@ function App() {
 
   useEffect(() => {
     const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
       .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
     const account = new Account(client);
 
     account.get()
       .then((user) => {
         setIsLoggedIn(true);
-        setUser(user);
+        // setUser(user);
       })
       .catch((error) => {
         setIsLoggedIn(false);

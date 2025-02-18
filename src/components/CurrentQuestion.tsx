@@ -1,5 +1,4 @@
-import { storage } from "../config/appwriteConfig"
-import React from 'react'
+import { storage } from "../../appwriteConfig"
 
 interface QuestionProps {
   question: {

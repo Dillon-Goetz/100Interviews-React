@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { databases, Query } from "../config/appwriteConfig";
+import { databases } from "../../";
 import CurrentQuestion from "./CurrentQuestion";
 import AnswerInput from "./AnswerInput";
 import AudioRecorder from "./AudioRecorder";
