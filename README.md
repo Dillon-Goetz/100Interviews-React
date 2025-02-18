@@ -47,8 +47,9 @@ export default tseslint.config({
     ...react.configs['jsx-runtime'].rules,
   },
 })
-```
-to connect your Appwrite db, add these to your .env 
+```js
+
+// to connect your Appwrite db, add these to your .env 
 VITE_APPWRITE_PROJECT=""
 VITE_APPWRITE_ENDPOINT=""
 VITE_APPWRITE_DATABASE=""
