@@ -1,4 +1,4 @@
-import React, { useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { Client, Account, ID } from "appwrite";
 import { useNavigate } from "react-router-dom";
 interface SignupProps {
@@ -9,7 +9,7 @@ interface SignupProps {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [errorMessage, setErrorMessage] = useState<string>("");
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
   
     const handleSignup = async (e: FormEvent) => {
       e.preventDefault();

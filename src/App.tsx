@@ -8,14 +8,14 @@ import QuestionDisplay from "./components/QuestionDisplay";
 import AccountPage from "./components/AccountPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
-import { Client, Account } from "appwrite";
+import { Client, Account, Models } from "appwrite";
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedNumQuestions, setSelectedNumQuestions] = useState(5);
   const [mode, setMode] = useState<"login" | "signup">("login");
   const navigate = useNavigate();
-  // const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
 
   useEffect(() => {
     const client = new Client()
@@ -24,15 +24,15 @@ function App() {
     const account = new Account(client);
 
     account.get()
-      .then((user) => {
-        setIsLoggedIn(true);
-        // setUser(user);
-      })
-      .catch((error) => {
-        setIsLoggedIn(false);
-        console.error(error);
-      });
-  }, []);
+    .then((user) => {
+      setIsLoggedIn(true);
+      setUser(user); // Corrected: Uncommented
+    })
+    .catch((error) => {
+      setIsLoggedIn(false);
+      console.error(error);
+    });
+}, []);
 
   const handleLoginSuccess = () => {
     setIsLoggedIn(true);

@@ -1,4 +1,4 @@
-import { storage } from "../../appwriteConfig"
+import { storage } from "../../appwriteConfig2"
 
 interface QuestionProps {
   question: {

@@ -1,5 +1,5 @@
 // Login.tsx
-import React, { useState, FormEvent } from "react";
+import { useState, FormEvent } from "react";
 import { Client, Account } from "appwrite";
 import { useNavigate } from "react-router-dom";
 
@@ -7,7 +7,7 @@ function Login({ onLoginSuccess }: { onLoginSuccess: () => void }) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
