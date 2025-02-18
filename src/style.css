@@ -1,0 +1,70 @@
+.mock-interview-practice {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .question-content {
+    margin-bottom: 20px;
+  }
+  
+  .question-text {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .audio-container {
+    margin-bottom: 10px;
+  }
+  
+  .answer-textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .recording-controls {
+    margin-bottom: 20px;
+  }
+  
+  .record-button {
+    padding: 10px 20px;
+    background-color: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .recorded-audio {
+    display: block;
+    margin-top: 10px;
+  }
+  
+  .navigation-controls {
+    display: flex;
+    justify-content: space-between;
+  }
+  
+  .nav-button,
+  .save-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .nav-button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+  }
+  
+  .save-button {
+    background-color: #28a745;
+  }
+  
+  

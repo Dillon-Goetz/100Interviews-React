@@ -1,0 +1,89 @@
+.account-page {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .page-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+  }
+  
+  .questions-section {
+    margin-bottom: 30px;
+  }
+  
+  .questions-section h3 {
+    font-size: 18px;
+    margin-bottom: 10px;
+  }
+  
+  .question-list {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  .question-item {
+    background-color: #f0f0f0;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+  }
+  
+  .create-question-section {
+    margin-bottom: 30px;
+  }
+  
+  .create-question-form {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .question-input {
+    flex-grow: 1;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  .submit-button,
+  .logout-button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #007bff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .back-to-home-button{
+    padding: 10px 20px;
+    font-size: 16px;
+    color: white;
+    background-color: #079c27;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .submit-button:hover,
+  .logout-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .logout-button {
+    background-color: #dc3545;
+  }
+  
+  .logout-button:hover {
+    background-color: #c82333;
+  }
+  
+  .error-message {
+    color: #dc3545;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  
