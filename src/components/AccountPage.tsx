@@ -1,7 +1,7 @@
 // AccountPage.tsx
 import React, { useState, useEffect } from "react";
 import { Client, Databases, Account, Models, ID } from "appwrite";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import '../styles/AccountPage.css';
 
 interface AccountPageProps {

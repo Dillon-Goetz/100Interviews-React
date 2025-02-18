@@ -1,5 +1,5 @@
 "use client"
-import React, { useState, useRef } from 'react';
+import { useState, useRef } from 'react';
 
 interface AudioRecorderProps {
     setAudioURL: (url: string) => void;

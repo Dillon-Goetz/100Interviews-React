@@ -15,7 +15,7 @@ function App() {
   const [selectedNumQuestions, setSelectedNumQuestions] = useState(5);
   const [mode, setMode] = useState<"login" | "signup">("login");
   const navigate = useNavigate();
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  // const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
 
   useEffect(() => {
     const client = new Client()
