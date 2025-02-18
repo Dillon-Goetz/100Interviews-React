@@ -1,4 +1,4 @@
-// App.tsx
+// src/App.tsx
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
 import Login from "./components/auth/Login";
@@ -24,18 +24,19 @@ function App() {
     const account = new Account(client);
 
     account.get()
-    .then((user) => {
-      setIsLoggedIn(true);
-      setUser(user); // Corrected: Uncommented
-    })
-    .catch((error) => {
-      setIsLoggedIn(false);
-      console.error(error);
-    });
-}, []);
+      .then((user) => {
+        setIsLoggedIn(true);
+        setUser(user);
+      })
+      .catch((error) => {
+        setIsLoggedIn(false);
+        console.error(error);
+      });
+  }, []);
 
-  const handleLoginSuccess = () => {
+  const handleLoginSuccess = (user: Models.User<Models.Preferences>) => {
     setIsLoggedIn(true);
+    setUser(user);
     navigate("/questionCount");
   };
 
@@ -50,13 +51,14 @@ function App() {
 
   const handleLogout = async () => {
     const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
+      .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
       .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
     const account = new Account(client);
 
     try {
       await account.deleteSession("current");
       setIsLoggedIn(false);
+      setUser(null);
       navigate("/");
     } catch (error) {
       console.error("Logout error:", error);
@@ -99,7 +101,7 @@ function App() {
         />
         <Route
           path="/account"
-          element={isLoggedIn ? <AccountPage onLogout={handleLogout} /> : null}
+          element={isLoggedIn ? <AccountPage onLogout={handleLogout} user={user} /> : null}
         />
       </Routes>
       <Footer />

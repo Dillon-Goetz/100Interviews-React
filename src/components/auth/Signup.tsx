@@ -1,56 +1,69 @@
-import { useState, FormEvent } from "react";
-import { Client, Account, ID } from "appwrite";
-import { useNavigate } from "react-router-dom";
+// src/components/auth/Signup.tsx
+import React, { useState } from "react";
+import { Client, Account, ID, Models } from "appwrite";
+
 interface SignupProps {
-    onLoginSuccess: () => void;
-  }
-  
-  function Signup({ onLoginSuccess }: SignupProps) { // Destructure props
-    const [email, setEmail] = useState<string>("");
-    const [password, setPassword] = useState<string>("");
-    const [errorMessage, setErrorMessage] = useState<string>("");
-    // const navigate = useNavigate();
-  
-    const handleSignup = async (e: FormEvent) => {
-      e.preventDefault();
-      setErrorMessage("");
-  
-      const client = new Client()
-        .setEndpoint("https://cloud.appwrite.io/v1")
-        .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
-  
-      const account = new Account(client);
-  
-      try {
-        await account.create(ID.unique(), email, password);
-        await account.createEmailPasswordSession(email, password); // Auto-login
-        onLoginSuccess();
-      } catch (error: any) {
-        console.error("Signup error:", error);
-        setErrorMessage(error.message || "Signup failed.");
+  onLoginSuccess: (user: Models.User<Models.Preferences>) => void;
+}
+
+function Signup({ onLoginSuccess }: SignupProps) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    const client = new Client()
+      .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
+      .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
+    const account = new Account(client);
+
+    try {
+      const user = await account.create(ID.unique(), email, password, name);
+      await account.createSession(email, password);
+      onLoginSuccess(user);
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("An unknown error occurred.");
       }
-    };
-  
-    return (
-      <div>
-        {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-        <form onSubmit={handleSignup}>
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.currentTarget.value)}
-          />
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.currentTarget.value)}
-          />
-          <button type="submit">Sign Up</button>
-        </form>
-      </div>
-    );
-  }
-  
-  export default Signup;
+    }
+  };
+
+  return (
+    <div>
+      <h2>Signup</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="text"
+          placeholder="Name"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Sign Up</button>
+      </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
+  );
+}
+
+export default Signup;

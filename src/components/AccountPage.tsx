@@ -6,6 +6,7 @@ import '../styles/AccountPage.css';
 
 interface AccountPageProps {
   onLogout: () => Promise<void>;
+  user: Models.User<Models.Preferences> | null; // Add this line
 }
 
 interface Question {
@@ -18,10 +19,9 @@ interface Question {
   userId?: string;
 }
 
-function AccountPage({ onLogout }: AccountPageProps) {
+function AccountPage({ onLogout, user }: AccountPageProps) { // Use user prop
   const [allQuestions, setAllQuestions] = useState<Question[]>([]);
   const [userQuestions, setUserQuestions] = useState<Question[]>([]);
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
   const [newQuestion, setNewQuestion] = useState("");
   const [error, setError] = useState<string | null>(null);
 
@@ -32,11 +32,8 @@ function AccountPage({ onLogout }: AccountPageProps) {
       .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
       .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
     const databases = new Databases(client);
-    const account = new Account(client);
 
-    account.get().then((user) => {
-      setUser(user);
-
+    if (user) { // Check if user prop exists
       databases
         .listDocuments(
           import.meta.env.VITE_APPWRITE_DATABASE,
@@ -59,11 +56,8 @@ function AccountPage({ onLogout }: AccountPageProps) {
           console.error("Error fetching questions:", error);
           setError("Failed to fetch questions. Please try again later.");
         });
-    }).catch((error) => {
-      console.error("Error fetching user:", error);
-      setError("Failed to fetch user information. Please try again later.");
-    });
-  }, []);
+    }
+  }, [user]); // Add user dependency
 
   const handleCreateQuestion = async (e: React.FormEvent) => {
     e.preventDefault();

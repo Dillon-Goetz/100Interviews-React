@@ -1,13 +1,15 @@
 // Login.tsx
 import { useState, FormEvent } from "react";
-import { Client, Account } from "appwrite";
-import { useNavigate } from "react-router-dom";
+import { Client, Account, Models } from "appwrite";
 
-function Login({ onLoginSuccess }: { onLoginSuccess: () => void }) {
+interface LoginProps {
+  onLoginSuccess: (user: Models.User<Models.Preferences>) => void;
+}
+
+function Login({ onLoginSuccess }: LoginProps) {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [errorMessage, setErrorMessage] = useState<string>("");
-  // const navigate = useNavigate();
 
   const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,14 +23,14 @@ function Login({ onLoginSuccess }: { onLoginSuccess: () => void }) {
 
     try {
       try {
-        await account.get(); // Check for existing session
-        // Session exists, either delete or skip
-        await account.deleteSession("current"); //delete existing session.
+        await account.get();
+        await account.deleteSession("current");
       } catch (sessionError) {
         // No session exists, proceed with login
       }
       await account.createEmailPasswordSession(email, password);
-      onLoginSuccess();
+      const user = await account.get(); // Fetch the user object
+      onLoginSuccess(user); // Pass the fetched user object
     } catch (error: any) {
       console.error("Login error:", error);
       setErrorMessage(error.message || "Login failed.");
