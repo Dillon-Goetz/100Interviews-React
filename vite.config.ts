@@ -5,7 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: '0.0.0.0', // Listen on all network interfaces
-    port: 3000, // Or your preferred port
+    host: '0.0.0.0',
+    port: 3000,
+    allowedHosts: ['one00interviews.onrender.com'], // Add your Render domain
   },
 });
