@@ -1,37 +1,44 @@
 // src/App.tsx
 import { useState, useEffect } from "react";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import Login from "./components/auth/Login";
-import Signup from "./components/auth/Signup";
 import QuestionCount from "./components/QuestionCount";
 import QuestionDisplay from "./components/QuestionDisplay";
 import AccountPage from "./components/AccountPage";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import "./styles/HeaderFooter.css";
+import "./App.css";
+import "./style.css";
 import { Client, Account, Models } from "appwrite";
+import AuthPage from "./components/auth/AuthPage";
+
+// Initialize Appwrite client and account instance globally
+const client = new Client()
+  .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
+  .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
+
+const account = new Account(client);
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [selectedNumQuestions, setSelectedNumQuestions] = useState(5);
   const [mode, setMode] = useState<"login" | "signup">("login");
-  const navigate = useNavigate();
   const [user, setUser] = useState<Models.User<Models.Preferences> | null>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    const client = new Client()
-      .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
-      .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
-    const account = new Account(client);
-
-    account.get()
-      .then((user) => {
+    const checkUserSession = async () => {
+      try {
+        const user = await account.get();
         setIsLoggedIn(true);
         setUser(user);
-      })
-      .catch((error) => {
+      } catch (error) {
+        console.warn("User is not logged in.");
         setIsLoggedIn(false);
-        console.error(error);
-      });
+      }
+    };
+
+    checkUserSession();
   }, []);
 
   const handleLoginSuccess = (user: Models.User<Models.Preferences>) => {
@@ -50,11 +57,6 @@ function App() {
   };
 
   const handleLogout = async () => {
-    const client = new Client()
-      .setEndpoint(import.meta.env.VITE_APPWRITE_ENDPOINT)
-      .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
-    const account = new Account(client);
-
     try {
       await account.deleteSession("current");
       setIsLoggedIn(false);
@@ -66,44 +68,29 @@ function App() {
   };
 
   return (
-    <div>
+    <div className="app-container">
       <Header />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <div>
-              {mode === "login" ? (
-                <div>
-                  <Login onLoginSuccess={handleLoginSuccess} />
-                  <p>
-                    Don't have an account? <button onClick={toggleMode}>Sign up</button>
-                  </p>
-                </div>
-              ) : (
-                <div>
-                  <Signup onLoginSuccess={handleLoginSuccess} />
-                  <p>
-                    Already have an account? <button onClick={toggleMode}>Log in</button>
-                  </p>
-                </div>
-              )}
-            </div>
-          }
-        />
-        <Route
-          path="/questionCount"
-          element={isLoggedIn ? <QuestionCount onStart={handleStart} /> : null}
-        />
-        <Route
-          path="/questions"
-          element={isLoggedIn ? <QuestionDisplay numQuestions={selectedNumQuestions} /> : null}
-        />
-        <Route
-          path="/account"
-          element={isLoggedIn ? <AccountPage onLogout={handleLogout} user={user} /> : null}
-        />
-      </Routes>
+      <div className="content">
+        <Routes>
+          <Route
+            path="/"
+            element={
+              <AuthPage
+                mode={mode}
+                toggleMode={toggleMode}
+                onLoginSuccess={handleLoginSuccess}
+              />
+            }
+          />
+          {isLoggedIn && (
+            <>
+              <Route path="/questionCount" element={<QuestionCount onStart={handleStart} />} />
+              <Route path="/questions" element={<QuestionDisplay numQuestions={selectedNumQuestions} />} />
+              <Route path="/account" element={<AccountPage onLogout={handleLogout} user={user} />} />
+            </>
+          )}
+        </Routes>
+      </div>
       <Footer />
     </div>
   );

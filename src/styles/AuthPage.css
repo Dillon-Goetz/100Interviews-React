@@ -1,0 +1,82 @@
+/* AuthPage.css */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 100px);
+    background-color: #f0f2f5;
+  }
+  
+  .auth-card {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    width: 350px;
+    height: 350px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .auth-title {
+    font-size: 28px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #333;
+  }
+  
+  .auth-switch {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-size: 16px;
+    color: #666;
+  }
+  
+  .auth-switch-btn {
+    background: none;
+    border: none;
+    color: #1877f2;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 0;
+    font-size: 16px;
+    transition: background-color 0.3s ease; /* Add transition */
+  }
+  
+  .auth-switch-btn:hover {
+    background-color: #e6f7ff; /* Light background on hover */
+  }
+  
+  /* Form Styles */
+  .auth-card input,
+  .auth-card button {
+    padding: 12px 15px;
+    font-size: 16px;
+    margin-bottom: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-family: inherit; /* Ensure consistent font */
+  }
+  
+  .auth-card button {
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Add transition */
+  }
+  
+  .auth-card button:hover {
+    background-color: #166fe5;
+  }
+  
+  /* Ensure consistent font family */
+  .auth-switch-btn,
+  .auth-card button {
+    font-family: inherit;
+  }

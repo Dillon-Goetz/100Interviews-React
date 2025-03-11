@@ -1,62 +1,57 @@
-// Login.tsx
-import { useState, FormEvent } from "react";
-import { Client, Account, Models } from "appwrite";
+// src/components/auth/Login.tsx
+import React, { useState } from "react";
+import { Account, Models } from "appwrite";
+import { account } from "../../appwriteConfig";
 
 interface LoginProps {
   onLoginSuccess: (user: Models.User<Models.Preferences>) => void;
+  account: Account; // ✅ Accept account as a prop
 }
 
 function Login({ onLoginSuccess }: LoginProps) {
-  const [email, setEmail] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
-  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
-  const handleLogin = async (e: FormEvent) => {
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    setErrorMessage("");
-
-    const client = new Client()
-      .setEndpoint("https://cloud.appwrite.io/v1")
-      .setProject(import.meta.env.VITE_APPWRITE_PROJECT);
-
-    const account = new Account(client);
+    setError(null); // Reset error on new attempt
 
     try {
-      try {
-        await account.get();
-        await account.deleteSession("current");
-      } catch (sessionError) {
-        // No session exists, proceed with login
-      }
+      // Create a session using email & password
       await account.createEmailPasswordSession(email, password);
-      const user = await account.get(); // Fetch the user object
-      onLoginSuccess(user); // Pass the fetched user object
-    } catch (error: any) {
+
+      // Fetch the logged-in user details
+      const user = await account.get();
+      onLoginSuccess(user);
+    } catch (error) {
       console.error("Login error:", error);
-      setErrorMessage(error.message || "Login failed.");
+      setError("Failed to log in. Please check your credentials.");
     }
   };
 
   return (
-    <div>
-      {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
-      <form onSubmit={handleLogin}>
+    <div className="login-container">
+      <form onSubmit={handleLogin} className="login-form">
         <input
           type="email"
           placeholder="Email"
           value={email}
-          onChange={(e) => setEmail(e.currentTarget.value)}
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
-          onChange={(e) => setPassword(e.currentTarget.value)}
+          onChange={(e) => setPassword(e.target.value)}
+          required
         />
-        <button type="submit">Login</button>
+        <button type="submit">Log in</button>
+        {error && <p className="error-message">{error}</p>}
       </form>
     </div>
   );
 }
 
-export default Login;
+export { Login };
