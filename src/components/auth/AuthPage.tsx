@@ -1,5 +1,5 @@
 // src/components/auth/AuthPage.tsx
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
 import "../../styles/AuthPage.css"; //css styling
@@ -15,8 +15,6 @@ interface AuthPageProps {
 }
 
 const AuthPage = ({ mode, toggleMode, onLoginSuccess }: AuthPageProps) => {
-  const [error, setError] = useState<string | null>(null);
-
   useEffect(() => {
     // Check if the user is already logged in
     const checkSession = async () => {
