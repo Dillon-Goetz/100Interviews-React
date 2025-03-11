@@ -1,9 +1,9 @@
 // src/components/auth/AuthPage.tsx
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Login } from "./Login";
 import { Signup } from "./Signup";
-import "../../styles/AuthPage.css";
-import { Client, Account, Models } from "appwrite";
+import "../../styles/AuthPage.css"; //css styling
+import { Models } from "appwrite";
 import { account } from "../../appwriteConfig";
 
 // Initialize Appwrite client
